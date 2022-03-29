@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Minerva Distant Reading Tool</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='assets/icons/favicon.ico') }}">
+
+    <script src="https://code.jquery.com/jquery-3.1.0.js" ></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script type="module" src="{{ url_for('static', filename='js/graphs.js') }}"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}"></link>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/d3-graph.css') }}"></link>
+  </head>
+  <body>
+      <header class="banner">
+          <span class="banner-text">Minerva Distant Reading Tool</span>
+      </header>
+      <div class="main-div" style="padding-top: 20px; width:100%">
+        <div class="text-div" id="text" style="width:49%">
+            <div style="width:50%">
+                <br />
+                <form id="zip-corpus-selection-cooc-form" method="POST" enctype="multipart/form-data">
+                    <p>Analyser un corpus TEI annoté par Ariane <span style="background-color:#FFFF00">[Mercure de France uniquement]</span> en cooccurrences (.zip) :</p>
+                    <br />
+                    <br />
+                    <span>
+                        <label for="zip-corpus-cooc-select">Corpus (.zip) :</label>
+                        <input id="zip-corpus-cooc-select" type="file" accept="application/zip" name="input zip" />
+                    </span>
+                    <br />
+                    <span style="width:90%">
+                        <label for="zip-corpus-cooc-pos-filter">Filtre des Parties-du-Discours :</label>
+                        <input id="zip-corpus-cooc-pos-filter" type="text" placeholder="par défaut: tout" name="POS filter" />
+                    </span>
+                    <br />
+                    <span style="width:90%">
+                        <label for="zip-corpus-cooc-NEtype-filter">Filtre des types d'entités :</label>
+                        <input id="zip-corpus-cooc-NEtype-filter" type="text" placeholder="par défaut: PER" name="NE filter" />
+                    </span>
+                    <br />
+                    <span style="width:90%">
+                        <label for="zip-corpus-cooc-target-property">Propriété wikidata cible :</label>
+                        <input id="zip-corpus-cooc-target-property" type="text" placeholder="par exemple: P21 (sexe ou genre)" name="target property" />
+                    </span>
+                    <br />
+                    <span style="width:90%">
+                        <label for="zip-corpus-cooc-max-degree">Nombre max de liens par nœud :</label>
+                        <input id="zip-corpus-cooc-max-degree" type="text" placeholder="par exemple: P21 (sexe ou genre)" name="max degree" />
+                    </span>
+                    <br />
+                    <input type="submit" id="zip-corpus-cooc-button" class="button-start" value="Analyser !" />
+                </form>
+            </div>
+            <div style="width:50%">
+                <br />
+                <form id="zip-corpus-selection-form" method="POST" enctype="multipart/form-data">
+                    <p>Rechercher un·e auteur·ice dans un corpus annoté par Ariane <span style="background-color:#FFFF00">[Mercure de France uniquement]</span> (.zip):</p>
+                    <br />
+                    <span>
+                        <label for="zip-corpus-select">Corpus (.zip) :</label>
+                        <input id="zip-corpus-select" type="file" accept="application/zip" name="input zip" />
+                    </span>
+                    <br />
+                    <span style="width:90%">
+                        <label for="zip-corpus-annotation-filter">Filtre des mentions :</label>
+                        <input id="zip-corpus-annotation-filter" type="text" placeholder="Sous-chaîne recherchée" name="annotation filter" />
+                    </span>
+                    <br />
+                    <span style="width:90%">
+                        <label for="zip-corpus-author-xpath">Chemin vers auteur dans XML :</label>
+                        <input id="zip-corpus-author-xpath" type="text" placeholder="ex: .//term[@type='author']" name="author xpath" />
+                    </span>
+                    <br />
+                    <input type="submit" id="zip-corpus-button" class="button-start" value="Analyser !" />
+                </form>
+            </div>
+            <br />
+            <form id="download-data-form">
+                <input type="submit" id="download-data-button" class="button-start" value="Télécharger (.tsv)" style="width:100%" />
+            </form>
+            <br />
+            <div style="padding-top: 10px">
+                <div class="div-image" id="image" style="float:none"></div>
+                <br />
+                <div class="div-backtotext" id="backtotext" style="float:none">
+                    Cliquez sur les noeuds pour changer l'affichage.
+                </div>
+            </div>
+        </div>
+        <div class="graph-div" id="graph" style="position:fixed; right:10px; width:49%"></div>
+      </div>
+
+
+    <script type="text/javascript">
+document.getElementById('zip-corpus-cooc-NEtype-filter').value = 'PER';
+document.getElementById('zip-corpus-cooc-max-degree').value = '10';
+    </script>
+
+
+    <script type="text/javascript">
+var data;  // holder for computed data (may be downloaded)
+
+function cleanLeftSide() {
+    document.getElementById("image").innerHTML = "";
+    document.getElementById("backtotext").innerHTML = "Cliquez sur les noeuds pour changer l'affichage.";
+}
+    </script>
+
+
+
+    <script type="text/javascript">
+const zip_corpus_cooc_button = document.querySelector('#zip-corpus-cooc-button');
+zip_corpus_cooc_button.onclick = (event) => {
+    event.preventDefault();
+    var form_data = new FormData($('#zip-corpus-selection-cooc-form').get(0));
+    $.ajax({
+        type: 'POST',
+        url: "{{ url_for('process_zip_cooc') }}",
+        data: form_data,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            event.preventDefault();
+            cleanLeftSide();
+            init(response);
+            data = response;
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            alert(textStatus + "\n" + "status: "+XMLHttpRequest.status + "\n" + "message: "+errorThrown);
+        }
+    });
+};
+    </script>
+
+
+
+    <script type="text/javascript">
+const zip_corpus_button = document.querySelector('#zip-corpus-button');
+zip_corpus_button.onclick = (event) => {
+    event.preventDefault();
+    var form_data = new FormData($('#zip-corpus-selection-form').get(0));
+    $.ajax({
+        type: 'POST',
+        url: "{{ url_for('process_zip') }}",
+        data: form_data,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            event.preventDefault();
+            cleanLeftSide();
+            init(response);
+            data = response;
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            alert(textStatus + "\n" + "status: "+XMLHttpRequest.status + "\n" + "message: "+errorThrown);
+        }
+    });
+};
+    </script>
+
+
+
+    <script type="text/javascript">
+const download_data_button = document.querySelector('#download-data-button');
+download_data_button.onclick = (event) => {
+    event.preventDefault();
+    $.ajax({
+        type: 'POST',
+        url: "{{ url_for('data_to_csv') }}",
+        data: JSON.stringify(data),
+        processData: false,
+        contentType: "application/json; charset=UTF-8",
+        success: function (response) {
+            event.preventDefault();
+            let data_export = "data:text/csv;charset=utf-8," + encodeURIComponent(response);
+            let downloadAnchorNode = document.createElement('a');
+            downloadAnchorNode.setAttribute("href",     data_export);
+            downloadAnchorNode.setAttribute("download", "minerva-export.tsv");
+            document.body.appendChild(downloadAnchorNode);
+            downloadAnchorNode.click();
+            downloadAnchorNode.remove();
+        }
+    });
+};
+    </script>
+
+  </body>
+</html>

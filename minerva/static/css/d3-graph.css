@@ -1,0 +1,27 @@
+div[id="graph"]{
+    background-color: #FFFFFF;
+}
+svg {
+    border: 1px solid #888888;
+}
+circle.node {
+    stroke: #FFFFFF;
+    stroke-width: 1px;
+    r: 6px;
+}
+circle.entity {
+    stroke: #FFFFFF;
+    stroke-width: 1px;
+    r: 6px;
+}
+line.link {
+    stroke: #555555;
+    stroke-width: 2px;
+    stroke-opacity: 0.75;
+    pointer-events: none;
+}
+path.hull {
+    stroke-width: 30px; /* 30px seems ok in most cases on computer */
+    stroke-linejoin: round;
+    opacity: 0.33;
+}

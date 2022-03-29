@@ -1,0 +1,74 @@
+h1 {
+    text-align: center;
+    font-size: 28pt;
+    margin-top:1em;
+}
+html, body {
+    height: 100%;
+    width: 99%;
+    margin: 1%;
+}
+body {
+    padding-top: 20px;
+    background-color: #EEEEEE;
+}
+body, select {
+  font: 14px verdana;
+}
+.banner {
+    position: absolute;
+    width: 100%;
+    background-color: #24468b;
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 28pt;
+    top: 0;
+    left: 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.banner-text {
+    margin-left: 2%;
+}
+.main-div div {
+    float: left;
+    clear: none;
+}
+.graph-div {
+    height: 80%;
+}
+span[id^="Ontologie"] {
+    background-color: #FFCCCC;
+    color: #FF0000;
+}
+span[id="Entity"] {
+    background-color: #CCCCFF;
+    color: #0000FF;
+}
+table[id="sourcetext"] {
+    border-collapse:collapse;
+    border-bottom: 2px solid #000000;
+}
+td {
+    border-bottom: 1px solid #000000;
+}
+th {
+    border-top: 2px solid #000000;
+    border-bottom: 1px solid #000000;
+}
+/*
+#example-selection-form {
+    width: 45%;
+}
+*/
+.button-start {
+    width: 90%;
+    height: 6vh;
+    background-color: #24468b;
+    color: #FFFFFF;
+    font-weight: bold;
+    cursor: pointer;
+}
+.button-start:hover {
+    color: #FFFF00;
+}
