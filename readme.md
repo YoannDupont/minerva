@@ -106,4 +106,30 @@ propriété Wikidata P21 (sexe ou genre) :
 Il est possible de cliquer sur les noeuds ou les zones afin d'effectuer un
 retour au texte :
 
-![graphe des cooccurrences pour la propriété P21](doc/images/cooc-wikidata-p21-02-back_to_text.png)
+![retour au texte pour la propriété P21](doc/images/cooc-wikidata-p21-02-back_to_text.png)
+
+## Cas 2 : fouille d'opinion
+
+Ce cas d'usage permet de fouiller les opinions/sentiments exprimées sur des
+entités du texte. L'analyse des opinions est faite via la plateforme Ariane.
+À l'heure actuelle, les entités douvent être préalablement reconnues et
+désambiguisées.
+
+Ce cas d'usage permet de récupérer les opinions sur des entités désambiguisées,
+avec la possibilité de comparer les résultats sur les différentes formes sous
+lesquelles elle est mentionnée.
+
+Exemple d'opinions sur le Mercure de France préannoté pour Carducci :
+
+![graphe d'opinions sur Carducci](doc/images/opinion-carducci-01.png)
+
+Il est possible de cliquer sur les noeuds ou les zones afin d'effectuer un
+retour au texte :
+
+![retour au texte sur Carducci](doc/images/opinion-carducci-02.png)
+
+Il est possible de lier ces opinions à une métadonnée des documents du corpus.
+Par exemple, pour l'ensemble des critiques littéraires du Mercure de France, il
+est possible de relier les opinions aux critiques qui les ont exprimées :
+
+![retour au texte sur Carducci](doc/images/opinion-carducci-03.png)
