@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Minerva Distant Reading Tool</title>
+    <title>Minerva NE-oriented XML-TEI Visualization Tool</title>
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='assets/icons/favicon.ico') }}">
 
     <script src="https://code.jquery.com/jquery-3.1.0.js" ></script>
@@ -14,14 +14,14 @@
   </head>
   <body>
       <header class="banner">
-          <span class="banner-text">Minerva Distant Reading Tool</span>
+          <span class="banner-text">Minerva NE-oriented XML-TEI Visualization Tool</span>
       </header>
       <div class="main-div" style="padding-top: 20px; width:100%">
         <div class="text-div" id="text" style="width:49%">
             <div style="width:50%">
                 <br />
                 <form id="zip-corpus-selection-cooc-form" method="POST" enctype="multipart/form-data">
-                    <p>Analyser un corpus TEI annoté par Ariane <span style="background-color:#FFFF00">[Mercure de France uniquement]</span> en cooccurrences (.zip) :</p>
+                    <p>Analyser un corpus TEI <span style="background-color:#FFFF00">annoté par Ariane et contenant des entités nommées désambiguïusées sur Wikidata</span> en cooccurrences (.zip) :</p>
                     <br />
                     <br />
                     <span>
@@ -55,7 +55,7 @@
             <div style="width:50%">
                 <br />
                 <form id="zip-corpus-selection-form" method="POST" enctype="multipart/form-data">
-                    <p>Rechercher un·e auteur·ice dans un corpus annoté par Ariane <span style="background-color:#FFFF00">[Mercure de France uniquement]</span> (.zip):</p>
+                    <p>Rechercher un·e auteur·ice dans un corpus TEI <span style="background-color:#FFFF00">annoté par Ariane et contenant des entités nommées désambiguïusées sur Wikidata</span> (.zip):</p>
                     <br />
                     <span>
                         <label for="zip-corpus-select">Corpus (.zip) :</label>

@@ -57,6 +57,7 @@ def process_zip_cooc():
         max_degree=max_degree
     )
 
+
 @app.route('/data_to_csv', methods=["POST"])
 @stream_with_context
 def data_to_csv():
